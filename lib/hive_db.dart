@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 ///
@@ -236,6 +237,15 @@ class HiveDb {
   }) {
     log('set ${_key(key, prefix)} to $value');
     return Hive.box(kBaseBox).put(_key(key, prefix), value);
+  }
+
+  /// Returns a [ValueListenable] which notifies its listeners when an entry
+  /// in the box changes.
+  ///
+  /// If [keys] filter is provided, only changes to entries with the
+  /// specified keys notify the listeners.
+  ValueListenable<Box> listen(List<String> keys) {
+    return Hive.box(kBaseBox).listenable(keys: keys);
   }
 
   /// Deletes the given [key] from the box.

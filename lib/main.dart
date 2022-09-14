@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hive_template/hive_db.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _load([bool write = true]) async {
     if (write) {
-      await HiveDb.instance.setInt("key_int", 1);
+      await HiveDb.instance.setInt("key_int", 1234567);
 
       await HiveDb.instance.setDouble("key_double", 12.3);
 
@@ -126,6 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
               _result,
               style: Theme.of(context).textTheme.bodyText1,
             ),
+            ValueListenableBuilder<Box>(
+              valueListenable: HiveDb.instance.listen(['key_int']),
+              builder: (context, box, widget) {
+                return Text(box.get('key_int').toString());
+              },
+            )
           ],
         ),
       ),
